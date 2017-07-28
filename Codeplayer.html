@@ -1,0 +1,204 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+<title>Code Player</title>
+
+	<style>
+
+		html, body{
+			margin:0;
+			padding:0;
+		}
+
+		#menuBar{
+			width:100%;
+			height:40px;
+			background-color:#e0e0e0;
+			border-bottom:1px solid grey;
+		}
+
+		#logo{
+			font-family:helvetica;
+			font-weight:bold;
+			font-size:130%;
+			padding:5px 0 0 20px;
+			float:left;
+		}
+		
+		#buttonDiv{
+			float:right;
+			padding:5px;
+		}
+		
+		#run{
+			font-size:110%;
+			border-radius:5px;
+			border:none;
+		}
+		
+		#toggles{
+			margin:0 auto;
+			width:197px;
+			list-style:none;
+			border:1px solid grey;
+			border-radius:3px;
+			height:27px;
+			padding:0;
+			position:relative;
+			top:5px;
+		}
+		
+		#toggles li{
+			float:left;
+			border-right:1px solid grey;
+			padding:5px 8px;
+		}
+		
+		.clear{
+			clear:both;
+		}
+		
+		.codeContainer{
+			height:100%;
+			width:50%;
+			float:left;
+		}
+		
+		.codeContainer textarea{
+			height:100%;
+			width:100%;
+			border:none;
+			border-right:1px solid grey;
+			padding:7px;
+			font-family:helvetica;
+			font-size:100%;
+			box-sizing:border-box;
+		}
+		
+		#CSSContainer, #JSContainer{
+			display:none;
+		}
+		
+		iframe{
+			height:100%;
+			position:relative;
+			left:20px;
+			border:none;
+			padding:7px;
+			font-size:110%;
+		}
+		
+		.selected{
+			background-color:grey;
+		}
+		
+		.toggle{
+			cursor:pointer;
+		}
+		
+	</style>
+
+</head>
+
+<body>
+
+	<div id="wrapper">
+		
+		<div id="menuBar">
+		
+			<div id="logo">
+				CodePlayer
+			</div>
+		
+			<div id="buttonDiv">
+				<button id="run">Run</button>
+			</div>
+			
+			<div>
+			
+				<ul id="toggles">
+				
+					<li class="toggle selected">HTML</li>
+					<li class="toggle">CSS</li>
+					<li class="toggle">JS</li>
+					<li style="border:none" class="toggle selected">Result</li>
+
+				</ul>
+				
+			</div>
+			
+		</div>
+		
+		<div class="clear"></div>
+		
+		<div class="codeContainer" id="HTMLContainer">
+			
+			<textarea id="htmlCode">HTML</textarea>
+		</div>
+		
+		<div class="codeContainer" id="CSSContainer">
+			
+			<textarea id="cssCode">CSS</textarea>
+		</div>
+		
+		<div class="codeContainer" id="JSContainer">
+			
+			<textarea id="jsCode">JS</textarea>
+		</div>
+		
+		<div class="codeContainer" id="ResultContainer">
+			
+			<iframe id="iframeWindow"></iframe>
+		</div>
+		
+	</div>
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script>
+		
+		var windowHeight = $(window).height();
+		
+		var menuBarHeight = $("#menuBar").height();
+		
+		var containerHeight = windowHeight-menuBarHeight;
+		
+		$(".codeContainer").height(containerHeight+"px");
+		
+		$(".toggle").click(function(){
+		
+			$(this).toggleClass("selected");
+			
+			var activeDiv = $(this).html();
+		
+			$("#"+activeDiv+"Container").toggle();
+			
+			var showingDivs = $(".codeContainer").filter(function(){
+				
+				return($(this).css("display")!="none");
+			}).length;
+			
+			var width = 100/showingDivs;
+			
+			$(".codeContainer").width(width+"%");
+		
+		})
+		
+		$("#run").click(function(){
+		
+		$("iframe").contents().find("html").html('<style>'+$("#cssCode").val()+'</style>'+$("#htmlCode").val());
+		
+		document.getElementById("iframeWindow").contentWindow.eval($("#jsCode").val());
+		
+		})
+
+		
+		
+	</script>
+	
+</body>
+
+</html>
